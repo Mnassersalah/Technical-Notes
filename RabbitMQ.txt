@@ -1,0 +1,102 @@
+Message Queuing : 
+	- Connecting multiple applications together with messages that are routed between them by messaging broker.
+	- benefits :
+		- decoupling between producers and consumers of messages.
+			- making it easy to subscripe with new consumers in the futures without breaking neither the producer nor the consumer.
+			- easy to scale by using multiple instances of time-consuming services consuming from the queue.
+			- in a standard way apps can communicate with each other independantly from app type , lang. written with ...
+			
+			
+			
+=> AMQP : 
+	open protocol used to standarize message queuing, that rabbit used it in its implemention. 
+	
+=> Message : 
+	- Payload : data we want to transfer
+	- label : descripes the Payload, Rabbit use it to route message to consumers
+				ie, use it to determine who should get a copy of the message.
+
+=> Puplisher (Producer) : 
+	- create a message & label it for routing 
+	- then publish it to the broker.
+
+=> Broker :	
+	- the server stands in the meddile between publishers & consumers 
+	- store messages, interprete the label to determine to route it to which consumer, then send it.
+	- decouple producer from consumer so No one know each other.
+
+=> Consumer : 
+	- attach to the broker then subscripe to a queue.
+	- consumed message only has the payload part not the label.
+	- it's up to the producer to include in the payload information of the routing or who is the producer(sender) of the message.
+	
+=> Channel 
+	- before consuming or publishing application should connect to broker server.
+		by connecting :
+			- app create TCP connection between it and the broker server.
+			- once it's opened and authenticated, app create AMQP channel over it.
+	
+	- AMQP channel : is a virtual connection inside the real TCP connection.
+	
+	- publishing, subscriping or consuming all is done over a channel.
+	
+	-Why to use channel instead of using just pure TCP connection ?
+		- creating TCP connectionn is expensive to operating system, 
+			and if we have only TCP, each thread will need to create its own connection to rabbit. which will hit the performance and limit the consumers to the limit of tcp connection of os.
+			
+		- So instead, use one TCP connection and over it multiple channels so :
+			so we achieve : 
+				- performance : by using the same TCP connection for all threads.
+				- privacy for each thread : by make each use its own channel.
+			
+=> Consuming Acknowledgment : 
+	- consumer must acknowledge that the message is recieved so Rabbit can safely remove it.
+	- there's 2 methods to acknowledge :
+		- consumer explicitly sending acknowledgement to Rabbit using basic.ack command.
+		- or setting auto_ack parameter to true when subscriping to the queue.
+	
+	- if consumer recieved the msg and :
+				 (app crashes, 
+				  connection with Rabbit lost or 
+				  consumer unsubscribed for the queue)  : 
+		>> Rabbit will consider msg is not delivered & it will be redelivered to the next subscribed consumer.
+		
+	- if the consumer is up and running and connected to Rabbit but doesn't send  acknowledgement, 
+		>> Rabbit will not send any other messages to the consumer as it consider it not ready to recieve any new messages.
+			(will not consider it undelivered as long as the consumer still has channel connection to rabbit server).
+
+
+
+Rabbit MQ : 
+
+
+-----
+TODO :  
+	quorum 
+	
+- either stopConsuming using channel.close or basicNacked as :
+	1- closing channel will mark that message as undelivered so it will be redelivered to another consumer automatically.
+	2- trying to basicNacked after closing channel will cause error 
+
+- requeue is false in basic.nack will cause 
+	- message deleted from rabbit without sending it to another consumer.
+	- message sent to DLX (dead-lettered exchange).
+	
+- requeue is true :
+	- messages will be returned to its position (q head) in the queue (if possible), 
+		>> If not (due to concurrent deliveries and acknowledgements from other consumers when multiple consumers share a queue), the message will be requeued to a position closer to queue head.
+		
+	to be redelivered to another subscribed consumer.
+	
+	** may cause redelivery loop if the cause of rejection (nack) is achieved in all consumers. 
+
+- dead-lettered messages : 
+	- messages that are rejected (using basic.reject or basic.nack) with requeue = false.
+	- messages that exceed PerMessage TTL (time to live) configuration (specified for msg) (note that PerQueue TTL not cause dead-lettered msgs).
+	- messages dropped as queue exceeds "max-length".
+	
+ Note : 
+	it's not safe in clustered Rabbit server as publishing to DLX (Dead lettered exchange) without publisher confirms (not to exhaust the server)
+		-> so messages may be lost if the target queue (DLX) is not available to accept messages.
+
+

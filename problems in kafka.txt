@@ -1,0 +1,19 @@
+problems : 
+=Request : 
+- failed to publish topic.
+	- rollback? => will be enter req handler again.
+	or 
+	- commit & presist to be resend with another service.
+
+- reqH is down while handling : 
+	- 
+
+=Resposne: 
+	- Failed to send resMsg from fixout to topic. 
+	- responseHandler down while handling 
+		-> rollback topic offset => will be entered resH again so we must know if it's maybe handled again.
+		-> autoCommit => msg will be lost
+		
+	- responseHandler failed to publish to Topic : 
+		-> rollback topic offset => will be entered resH again so we must know if it's maybe handled again.
+		-> commit & presist to be resend with another service.

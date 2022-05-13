@@ -1,0 +1,7 @@
+Conccurency
+
+- Asyncronous : 
+	make use of thread instead of being idle while IO operation is being handled (ie, Network call, database connection, io in hard disk files...)
+	so it not depends on multiple threads but make the most benefits of the one thread
+	
+	- await word pause its container async method and return uncompleted Task

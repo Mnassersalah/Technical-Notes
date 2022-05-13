@@ -1,0 +1,53 @@
+Redis : 
+	In-Memory Key value No-SQL Database.
+	
+	In-Memory : built in memory first but later introduced durability solutions using eventual snapshots
+	Key : string 
+	Value : could be any type (string, int, json, media...)
+	Database : Has a lot of database aspects
+	
+- used primarly for caching but can be extended to be used as database.
+
+- message broker: 
+	can be used as message broker that can be used in Pub-Sub architecture.
+
+- single threaded :
+	except if durability is enabled which make it two-threaded 
+	and the other thread is only used internally for saving in disk.
+	
+- Optional Durability 
+	can achieve durability with one of two options : 
+	- Journaling (append only log AOL)
+		log every operation happens on memory (eg, adding a new key value pair, remove key, update value of a key ...)
+		like what sql server do in log file in every transaction
+	
+	- Snapshotting :
+		- take snapshots of the whole in memory data periodically and convert it to binary and save it into disk.
+		- has a risk if the server went down between the snapshots so the operations after the last snapshots will be lost.
+		
+	Both of modes happen in a background thread asyncrounsly.
+	
+- Transport Protocol : 
+	- Uses TCP protocol.
+	- request / response just like http (so sending request to add new key value and recieve a response of acknowledgement)
+	- Uses Messaging format ReSP (Redis Serializing Protocol)
+	
+- Pub-Sub Model 
+	- supports publish subscripe model.
+	- use pushing to subscripers (oth kafka uses long pulling as its subscripers are usually many and not limited)
+	- subscripers are limited
+	- when a service subscripe for redis it (block polling from it) and make it client only and only pushing to it.
+	
+- Replication & Clustering 
+	Replications : 
+		- One leader many followers model.
+		- replicate the whole data into other followers nodes (most probably used for scaling reading)
+		- followers are updated with any change happens in leader replica
+		
+	Clustering : 
+		- Sharding data across multiple nodes.
+		- splitting the data into parts each part is in cluster node.
+		
+	Hybrid : 
+		- clustring data and replicate each cluster node.
+		

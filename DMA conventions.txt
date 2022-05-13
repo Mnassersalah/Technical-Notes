@@ -1,0 +1,7 @@
+Validations : 
+	- Create new Validator Class (ie, class implements IValidator) for each new Validation.
+	- Add new value to _DMAValidations enum for each new Validation.
+	- Add the new Validator class as Singlton in the ServiceCollection in DMARequestEngine.
+	- Add the new validator with its enum value in Resolver_DMAValidations switch in in DMARequestEngine.
+	- add the _DMAValidations for the new validation into the validation pipeline in the required handler(s) ie, NewOrderHandler, EditOrderHandler, CancelOrderHandler.
+	- add unit test class for each new validator in EFG.DMA.Validation.Tests project

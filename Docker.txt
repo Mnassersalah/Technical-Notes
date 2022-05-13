@@ -1,0 +1,33 @@
+
+- Virtualization : 
+	- 
+
+- Containers Vs Virtual machines 
+	- Containers : virtualize only the apps layer(file system, ..) of os but uses the kernal of the hosting os.
+	- VM : virtualize both the kernal & apps layers of OS so it's heavier than container.
+
+Docker : 
+	- Containers management service
+	- it's not the only tool to manage containers it has competitors like , 
+	
+Container : 
+	- runnable unit of software that packaging up code with its dependancies, configurations ...
+	- runnable instance of an image.
+	
+Image : 
+	- Read-only template with instructions for creating a docker container.
+	- a template for how to build a container.
+	
+Rejestry : 
+	Stores docker images.
+	- eg, DockerHub is a public rejestries that anyone can use.
+			it's the default rejestry for Docker so 
+				ie, if we run pull command it look for images in the local machine if not found it will look for it on Docker Hub by default (can be configured).
+				
+Client : 
+	The user interface to send docker commands to docker api.
+
+Docker Daemon : 
+	listen to docker api requests and manage docker objects such as images, containers, network and volume.
+	
+	

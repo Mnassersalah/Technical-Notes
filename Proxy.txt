@@ -1,0 +1,28 @@
+Proxy 
+A proxy is simply a middleman for communication (requests + responses). Client <-> Proxy <-> Server
+
+Forward Proxy (Client proxy): 
+	- ( client <-> proxy ) <-> server
+		The proxy acts on behalf of the client. The client knows about all three machines involved in the chain. The server doesn't.
+		ie, hide the client from distination.
+	
+	uses : 
+		- Caching 
+		- logging 
+		- anonymaty
+		- website blocking
+		- microservices
+
+Reverse Proxy (Server proxy)
+	- client <-> ( proxy <-> server )
+		The proxy acts on behalf of the server. The client only knows about the proxy. The server knows the whole chain.
+		ie, hide distination from client.
+		
+	uses : 
+		- load balancing 
+		- ingress (routing eg, /products to server1, /users => server2)
+		- canary deployment (deploying a release to subset of users)
+		- Caching
+		- microservices
+		
+https://i.stack.imgur.com/0qpxZ.png

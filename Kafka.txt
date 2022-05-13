@@ -1,0 +1,28 @@
+Kafka 
+	- Producer 
+		publishing messages
+	- Broker
+		server 
+		
+	- Consumer 
+		- recieving messages use pull information model
+	
+	- Topic :
+		logical partition of data 
+		producer pushes data to specific topic and consumer consume data from specific topic
+		
+	- partitions : 
+		like db sharding (spliting large data in topic into partitions so queries becomes faster)
+		
+	- consumer group : 
+		- for parallel processing on partitions 
+		
+- connection between producer & kafka broker 
+				and  kafka broker & consumer => use protocol based on TCP connection.
+				
+				
+				
+- Topic is append-only 
+- message in Topic contains : 
+	- message position
+	- 

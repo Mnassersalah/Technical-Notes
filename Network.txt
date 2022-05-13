@@ -1,0 +1,119 @@
+Network
+- Internet : network of networks
+
+- End systems(hosts) connected together by a network consists of : 
+	- communication links 
+		including coaxial cable, copper wire, optical fiber, and radio spectrum
+	- packet switches 
+		take a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links
+		most important types :
+		- routers : used in network core.
+		- link-layer switches : used in access networks.
+		
+-  packets : 
+	the sending end system segments the data and adds header bytes to each segment. The resulting packages of information, known as packets.
+	which reassembled into original data in the destination end system.
+	
+- Internet Service Providers (ISPs)
+
+
+--------------------
+OSI Model : (Open Systems Interconnections)
+
+consists of 7 layers : 
+	
+7. Application
+	- get request, body, headers...
+	- http protocol
+	
+6. Presentation 
+	- serializing, compressing, encrypting, decrypting...
+	- usually we do it's functions in layer 7
+	
+5. Session 
+	- maintain the session, maintains the connection, giving session number
+	- usually pushed down to layer 4
+
+4. Transport
+	- deals with application ports source & destination ports, adding them in headers in the reqeust
+	- deals with segments consists of added headers (seq. no, ports, ...) and the content.
+	- eg, tcp protocol
+
+3. Network
+	- add ip address for source & destination
+	- deals with packets (added ip address for source & destination to tcp segment)
+	- IP protocol
+
+2. Data link 
+	- add MAC Address for source & destination (MAC of the gateway ie, the Router)
+	- may split ip packets into multiple frames of 0s and 1s (no logical split).
+	
+1. physical
+	- converting frames (punches of 0s and 1s ) into the (electrical signals, light , radio waves...) through the physical medium.
+	
+	
+-------------
+TCP Vs UDP
+
+TCP : 
+	Pros:
+	- Acknowledgment
+	- guaranteed delivery (resending)
+	- connceted 
+	- Congestion Control (eg, wait for traffic to be clear)
+	- ordered Packets 
+	- reliable
+	
+	Cons: 
+	- stateful
+		if restart the server while the client is connected the client couldn't resume connection
+			(the two ends server&client save state data of the other part eg, if it's connected ,if it's acknowleged..)
+	- more bandwidth
+	- larger packets
+	- slower than udp
+	- Server memory (to keep connections) => cause denial of service attacks( )
+	
+UDP 
+	Pros:
+	- fast
+	- small bandwidth
+	- smaller packets
+	- stateless
+	
+	Cons:
+	- No Acknowledgment
+	- No guaranteed delivery (no retransmission)
+		udp packet only add crc (check sum) on top of the request data that tell if the data is good or not but still not totally guaranteed that.
+	- connectionless (no physical connection server don't know its client and vise versa )
+	- no congestion control
+		no waiting for traffic 
+	- no ordered packets
+	- security issues
+		as there's no connection , only sending data if you know the ip and port
+	
+
+----------------
+HTTP 1.0
+	- new TCP connection for each request.
+	- slow
+	- buffering (if file is large it buffers wait for server to build that large file)
+HTTP 1.1
+	- persisted tcp connection using keep-alive header so tcp connection not closed during the requests related to each other 
+		(eg, requesting js files in html file)
+	- streaming with chunked transfer instead of buffering
+		sending chunks of data instead of waiting for the whole file in one time (remember image loading part by part) 
+	- pipeline (disabled by default) (problematic)
+	
+HTTP/2 (SPDY)
+	- using muliplexing (multiple http request in on TCP reqeust)
+	- server push
+	- compression
+	- secure by default
+	- protocol negotiation during tls (NPN/ ALPN)  
+
+HTTP 3 (HTTP/2 over QUIC) 
+	- using QUIC instead of TCP (which is a udp with congestion control)
+	- all HTTP/2 features
+	- still expremental
+	
+------------------------

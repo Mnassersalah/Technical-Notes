@@ -1,0 +1,36 @@
+== symetric encryption
+- one shared key used for encrypting & decrypting
+	so if the two ends has that key they could ( encrypt >> send >> decrypt ) safely
+	
+- Pros 
+	- Fast 
+	- Efficient for large files 
+
+- Cons
+	- hard to send shared key safely
+
+- eg : 
+	AES (advanced encryption standard)
+	DES (less secure)
+	Twofish
+	Serpent
+
+== asymetric encryption
+- public key for encrypting
+- private key for decrypting
+	- sending public key from A to B
+	- B use that key to encrypt data then send it to A
+	- A use private key to decrypt the data.
+
+- Pros 
+	- public key can be shared 
+	- designed for small data (ssh)
+
+- Cons 
+	- slow (time consuming algorithm to encrypt and decrypt)
+	- ineffecient for large files.
+	
+- eg : 
+	RSA (used in SSH), 
+	Diffie-Hellman , 
+	ElGamal 

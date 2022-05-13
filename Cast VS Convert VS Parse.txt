@@ -1,0 +1,7 @@
+
+cast vs convert vs parse
+cast & convert has the same syntax " (type1)type2 " but they'er different : 
+= cast : change the type without changing value () >> from parent to child 
+= convert : changing the value from type to type >> using casting operator
+
+= parsing : is used with converting from string >> converting string to different type by understanding its content.
