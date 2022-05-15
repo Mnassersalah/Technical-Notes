@@ -79,6 +79,9 @@ docker ps [-a]
 docker images 
 	>> list all images in the local registry
 
+docker build -t {imageName}:{tag} {dockerFile directory}
+	>> build Dockerfile to generate an image with the specified name & tag
+
 docker pull {imageName}[:{version}]
 	>> check if image exists in the local machine, if not it pulls the image from remote registry (dockerhub by default, can be configured)
 
@@ -136,7 +139,3 @@ docker-compose -f {yaml file name} down
 	   remove these containers
 	   remove the default network created with `up` command
 	
-
----------docker-compose-------- 
-docker build -t {imageName}:{tag} {dockerFile directory}
-	>> build Dockerfile to generate an image with the specified name & tag
