@@ -1,7 +1,3 @@
-
-- Virtualization : 
-	- 
-
 - Containers Vs Virtual machines 
 	- Containers : virtualize only the apps layer(file system, ..) of os but uses the kernal of the hosting os.
 	- VM : virtualize both the kernal & apps layers of OS so it's heavier than container.
