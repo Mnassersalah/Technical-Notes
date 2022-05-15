@@ -12,16 +12,16 @@ Docker :
 	
 Container : 
 	- runnable unit of software that packaging up code with its dependancies, configurations ...
-	- runnable instance of an image.
+	- runnable instance(environment) of an image.
 	
 Image : 
 	- Read-only template with instructions for creating a docker container.
 	- a template for how to build a container.
 	
-Rejestry : 
+Registry : 
 	Stores docker images.
-	- eg, DockerHub is a public rejestries that anyone can use.
-			it's the default rejestry for Docker so 
+	- eg, DockerHub is a public registries that anyone can use.
+			it's the default registry for Docker so 
 				ie, if we run pull command it look for images in the local machine if not found it will look for it on Docker Hub by default (can be configured).
 				
 Client : 
@@ -31,3 +31,116 @@ Docker Daemon :
 	listen to docker api requests and manage docker objects such as images, containers, network and volume.
 	
 	
+Docker Network : 
+	- network between containers that make it possible for containers in the same network to talk to each other without specifying the ip or the port.
+	- containers that should access each other should be set to the same network using --net parameter while creating the container.
+
+
+Docker Volume :
+	- used for data presistance
+	- containers lose their presisted data (if they have eg, mongo db) when they stop.
+	- volumes make it possible to presist data between containers restarting..
+	- mount (link) a folder in the host with a folder in the container so the two folders are replicas from each other in the two ways.
+		so when we restart the container docker fetch the data and replicate it to the linked folder in the container.
+	- when we define a volumne there's 3 ways : 
+		- anonymous : 
+			define only the folder in the container and let docker create and handle the folder in the host.
+		- named : (recommended)
+			like the anonymous type but we reference that storage in the host file system with a name.
+		- host volume 
+			define both paths in host & container file systems.
+	
+Docker Compose : 
+	- package that makes it easier to create and run containers by creating them from yaml files containing the required containers to run together and their configurations.
+	- make it easier to modify the configurations and rerun the containers by just modifying the yaml file.
+	- no need to specify the network as docker-compose by itself creates a network and assign it to the containers when creating them.
+	
+
+Dockerfile : 
+
+	- file with that exact name "Dockerfile" that define a blueprint for the image ie, instructions that will be in the image after build the Dockerfile.
+	- dockerfile commands : 
+		- FROM 
+			define the base image for the application eg, "node" for node application or "aspnet" for .net applications 
+		- RUN
+			to run any linux command inside the container
+		- COPY
+			to copy files from host to container.
+		
+		- CMD
+			define an entry point for the container 
+			eg, CMD(["node", "server.js")
+				that means that that when we start the container this command will run (which will run the server and start listening to requests in this example)
+				
+		- ENV 
+			define environment variables with values in the image itself (like predefined values in the image instead of define them each time we run a container)
+-------------------
+
+= Docker Commands 
+docker ps [-a]
+	>> list all running containers (-a list running & not-running containers)
+
+docker images 
+	>> list all images in the local registry
+
+docker pull {imageName}[:{version}]
+	>> check if image exists in the local machine, if not it pulls the image from remote registry (dockerhub by default, can be configured)
+
+docker create {imageName}[:{version}]
+	>> create a container from specified image
+
+docker start {containerID}
+	>> start a container that was already created
+
+docker run [-d] 															//detached
+		   [-v {[name / full host path / nothing]:container storage path}]	//volume
+		   [-p{hostOs port}:{container port}] 								//port binding		
+		   [--name {docker Name you want}] 									
+		   { imageName}[:version] 
+	
+	
+	>> pull image if not found in the local registry and run a container of that image
+	>> compine pull, create and start 
+	
+docker stop {containerID}
+	>> stop the container with that id
+	
+docker rm {containerID}
+	>> remove container
+	
+docker rmi {imageID}	
+	>> remove image 
+	
+--- debugging commands
+docker logs {container name or ID} [-n {num of lines}] [-f]
+	>> show the logs of the container 
+		-n for number of last logs 
+		-f for following logs (like attached mode)
+		
+docker exec -it {container name or ID} {command to the container eg, redis-cli get x}
+	>> access the termenal of the container so we can run a command of it or access files inside the container file system
+	
+--- Network commands
+docker network ls
+	>> list all the networks created.
+
+docker network create {Network Name}
+	>> create a network for containers to be able to access each other when they are attached to the same network.	
+	
+---------docker-compose-------- 
+
+docker-compose -f {yaml file name} up [-d]
+	>> create a default network 
+	   create containers configured in yaml file and assign the created network to them
+	   run these containers
+
+
+docker-compose -f {yaml file name} down 
+	>> stop containers configured in yaml file 
+	   remove these containers
+	   remove the default network created with `up` command
+	
+
+---------docker-compose-------- 
+docker build -t {imageName}:{tag} {dockerFile directory}
+	>> build Dockerfile to generate an image with the specified name & tag
